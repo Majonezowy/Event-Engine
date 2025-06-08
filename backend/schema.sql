@@ -1,4 +1,3 @@
-
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,18 +29,28 @@ CREATE TABLE IF NOT EXISTS teams (
 -- Team members table
 CREATE TABLE IF NOT EXISTS team_members (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    team_id INT,
-    user_id INT,
+    team_id INT NOT NULL,
+    user_id INT NOT NULL,
     role VARCHAR(255) NOT NULL,
     FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Attendance table (corrected name and columns)
+CREATE TABLE IF NOT EXISTS attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    node_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Points table
 CREATE TABLE IF NOT EXISTS points (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    node_id INT,
+    user_id INT NOT NULL,
+    node_id INT NOT NULL,
     score INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
