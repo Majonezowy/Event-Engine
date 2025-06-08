@@ -37,3 +37,13 @@ coverage/
 *.local
 *.cache
 *.tmp
+
+.venv/
+venv/
+
+# Python bytecode
+*.pyc
+__pycache__/
+
+# Database secrets
+secrets.env

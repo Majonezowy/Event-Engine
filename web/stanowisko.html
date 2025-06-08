@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stanowisko Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Get stanowisko data
+                const response = await axios.get('api/stanowisko');
+                const data = response.data;
+                console.log('Stanowisko data:', data);
+
+                // Assuming data has an 'id' property
+                if (data && data.id) {
+                    // Send id in POST request
+                    const postResponse = await axios.post('/stanowisko', { id: data.id });
+                    console.log('POST response:', postResponse.data);
+                } else {
+                    console.log('No id found in stanowisko data.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
