@@ -21,6 +21,8 @@ class LoginRequest(BaseModel):
     password: str
 
 class RegisterRequest(LoginRequest):
+    imie: str
+    nazwisko: str
     klasa: str
 
 class AttendanceRequest(BaseModel):
@@ -63,8 +65,10 @@ async def register(user: RegisterRequest):
 
     logger.info(f"Attempting to register user: {user.email}")
 
-    if not user.email or not user.password:
-        return {"error": "Email and password are required"}
+    if not user.email or not user.password or not user.klasa or not user.imie or not user.nazwisko:
+        return {"error": "All fields are required for registration"}
+    if len(user.password) < 8:
+        return {"error": "Password must be at least 8 characters long"}
     
     # Sprawdź, czy użytkownik już istnieje
     existing_user = await db.fetch_one("SELECT * FROM users WHERE email = %s", user.email)
@@ -72,10 +76,10 @@ async def register(user: RegisterRequest):
         logger.warning(f"User {user.email} already exists")
         return {"error": "User already exists"}
 
-    db_query = "INSERT INTO users (email, password, class) VALUES (%s, %s, %s)"
+    db_query = "INSERT INTO users (email, password, class, imie, nazwisko) VALUES (%s, %s, %s, %s, %s)"
     try:
         logger.info(f"Registering user {user.email} with class {user.klasa}")
-        await db.execute(db_query, user.email, user.password, user.klasa)
+        await db.execute(db_query, user.email, user.password, user.klasa, user.imie, user.nazwisko)
     except Exception as e:
         logger.error(f"Failed to register user {user.email}: {str(e)}")
         return {"error": f"Failed to register user: {str(e)}"}
