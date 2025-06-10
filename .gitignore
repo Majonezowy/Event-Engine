@@ -47,3 +47,7 @@ __pycache__/
 
 # Database secrets
 secrets.env
+
+bak_editor.py
+srednia.py
+srednia_backup.pkl
